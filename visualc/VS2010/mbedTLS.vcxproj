@@ -208,6 +208,7 @@
     <ClInclude Include="..\..\include\mbedtls\sha1.h" />
     <ClInclude Include="..\..\include\mbedtls\sha256.h" />
     <ClInclude Include="..\..\include\mbedtls\sha512.h" />
+    <ClInclude Include="..\..\include\mbedtls\shani.h" />
     <ClInclude Include="..\..\include\mbedtls\ssl.h" />
     <ClInclude Include="..\..\include\mbedtls\ssl_cache.h" />
     <ClInclude Include="..\..\include\mbedtls\ssl_ciphersuites.h" />
@@ -361,6 +362,7 @@
     <ClCompile Include="..\..\library\sha1.c" />
     <ClCompile Include="..\..\library\sha256.c" />
     <ClCompile Include="..\..\library\sha512.c" />
+    <ClCompile Include="..\..\library\shani.c" />
     <ClCompile Include="..\..\library\ssl_cache.c" />
     <ClCompile Include="..\..\library\ssl_ciphersuites.c" />
     <ClCompile Include="..\..\library\ssl_cli.c" />

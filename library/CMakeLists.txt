@@ -82,6 +82,7 @@ set(src_crypto
     sha1.c
     sha256.c
     sha512.c
+    shani.c
     threading.c
     timing.c
     version.c
@@ -119,10 +120,16 @@ set(src_tls
 
 if(CMAKE_COMPILER_IS_GNUCC)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmissing-declarations -Wmissing-prototypes")
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "(x64|x86_64|amd64|AMD64)")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -msse4.2 -msha")
+    endif()
 endif(CMAKE_COMPILER_IS_GNUCC)
 
 if(CMAKE_COMPILER_IS_CLANG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmissing-declarations -Wmissing-prototypes -Wdocumentation -Wno-documentation-deprecated-sync -Wunreachable-code")
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "(x64|x86_64|amd64|AMD64)")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -msse4.2 -msha")
+    endif()
 endif(CMAKE_COMPILER_IS_CLANG)
 
 if(WIN32)

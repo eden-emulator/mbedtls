@@ -27,6 +27,7 @@
 #if defined(MBEDTLS_SHA256_C)
 
 #include "mbedtls/sha256.h"
+#include "mbedtls/shani.h"
 #include "mbedtls/platform_util.h"
 #include "mbedtls/error.h"
 
@@ -262,7 +263,11 @@ int mbedtls_internal_sha256_process( mbedtls_sha256_context *ctx,
 void mbedtls_sha256_process( mbedtls_sha256_context *ctx,
                              const unsigned char data[64] )
 {
-    mbedtls_internal_sha256_process( ctx, data );
+    if (mbedtls_shani_has_support() != 0) {
+        mbedtls_internal_sha256ni_process(ctx->state, data);
+    } else {
+        mbedtls_internal_sha256_process( ctx, data );
+    }
 }
 #endif
 #endif /* !MBEDTLS_SHA256_PROCESS_ALT */
@@ -297,8 +302,13 @@ int mbedtls_sha256_update_ret( mbedtls_sha256_context *ctx,
     {
         memcpy( (void *) (ctx->buffer + left), input, fill );
 
-        if( ( ret = mbedtls_internal_sha256_process( ctx, ctx->buffer ) ) != 0 )
-            return( ret );
+        if (mbedtls_shani_has_support() != 0) {
+            if( ( ret = mbedtls_internal_sha256ni_process( ctx->state, ctx->buffer ) ) != 0 )
+                return( ret );
+        } else {
+            if( ( ret = mbedtls_internal_sha256_process( ctx, ctx->buffer ) ) != 0 )
+                return( ret );
+        }
 
         input += fill;
         ilen  -= fill;
@@ -307,8 +317,13 @@ int mbedtls_sha256_update_ret( mbedtls_sha256_context *ctx,
 
     while( ilen >= 64 )
     {
-        if( ( ret = mbedtls_internal_sha256_process( ctx, input ) ) != 0 )
-            return( ret );
+        if (mbedtls_shani_has_support() != 0) {
+            if( ( ret = mbedtls_internal_sha256ni_process( ctx->state, input ) ) != 0 )
+                return( ret );
+        } else {
+            if( ( ret = mbedtls_internal_sha256_process( ctx, input ) ) != 0 )
+                return( ret );
+        }
 
         input += 64;
         ilen  -= 64;
@@ -359,8 +374,13 @@ int mbedtls_sha256_finish_ret( mbedtls_sha256_context *ctx,
         /* We'll need an extra block */
         memset( ctx->buffer + used, 0, 64 - used );
 
-        if( ( ret = mbedtls_internal_sha256_process( ctx, ctx->buffer ) ) != 0 )
-            return( ret );
+        if (mbedtls_shani_has_support() != 0) {
+            if( ( ret = mbedtls_internal_sha256ni_process( ctx->state, ctx->buffer ) ) != 0 )
+                return( ret );
+        } else {
+            if( ( ret = mbedtls_internal_sha256_process( ctx, ctx->buffer ) ) != 0 )
+                return( ret );
+        }
 
         memset( ctx->buffer, 0, 56 );
     }
@@ -375,8 +395,13 @@ int mbedtls_sha256_finish_ret( mbedtls_sha256_context *ctx,
     MBEDTLS_PUT_UINT32_BE( high, ctx->buffer, 56 );
     MBEDTLS_PUT_UINT32_BE( low,  ctx->buffer, 60 );
 
-    if( ( ret = mbedtls_internal_sha256_process( ctx, ctx->buffer ) ) != 0 )
-        return( ret );
+    if (mbedtls_shani_has_support() != 0) {
+        if( ( ret = mbedtls_internal_sha256ni_process( ctx->state, ctx->buffer ) ) != 0 )
+            return( ret );
+    } else {
+        if( ( ret = mbedtls_internal_sha256_process( ctx, ctx->buffer ) ) != 0 )
+            return( ret );
+    }
 
     /*
      * Output final state
