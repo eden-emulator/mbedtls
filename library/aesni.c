@@ -117,14 +117,90 @@ int mbedtls_aesni_crypt_ecb( mbedtls_aes_context *ctx,
 
     if (mode == MBEDTLS_AES_ENCRYPT)
     {
-        for (i = ctx->nr - 1; i; --i)
+        if (ctx->nr == 10) {
             a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+        } else if (ctx->nr == 12) {
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+        } else if (ctx->nr == 14) {
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+        } else {
+            for (i = ctx->nr - 1; i; --i)
+                a = _mm_aesenc_si128( a, _mm_loadu_si128( rk++ ) );
+        }
         a = _mm_aesenclast_si128( a, _mm_loadu_si128( rk ) );
     }
     else
     {
-        for (i = ctx->nr - 1; i; --i)
+        if (ctx->nr == 10) {
             a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+        } else if (ctx->nr == 12) {
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+        } else if (ctx->nr == 14) {
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+            a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+        } else {
+            for (i = ctx->nr - 1; i; --i)
+                a = _mm_aesdec_si128( a, _mm_loadu_si128( rk++ ) );
+        }
         a = _mm_aesdeclast_si128( a, _mm_loadu_si128( rk ) );
     }
 
